@@ -3,67 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lumina Photo Album - Professional Edition</title>
+    <title>Lumina Photo Studio - Ultimate Edition ⚡</title>
+    
+    <!-- External Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
-    <style>
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #1a1a1a; }
-        ::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #666; }
-
-        .masonry-grid { column-count: 2; column-gap: 1rem; padding-bottom: 5rem; }
-        @media (min-width: 768px) { .masonry-grid { column-count: 3; } }
-        @media (min-width: 1024px) { .masonry-grid { column-count: 4; } }
-        @media (min-width: 1280px) { .masonry-grid { column-count: 5; } }
-        @media (min-width: 1536px) { .masonry-grid { column-count: 6; } }
-        .masonry-item { break-inside: avoid; margin-bottom: 1rem; display: inline-block; width: 100%; }
-
-        .glass-effect { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .glass-strong { background: rgba(23, 23, 23, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-top: 1px solid rgba(255, 255, 255, 0.1); }
-
-        .filter-preset { position: relative; min-width: 80px; height: 80px; border-radius: 0.5rem; overflow: hidden; cursor: pointer; transition: all 0.2s; border: 2px solid transparent; flex-shrink: 0; }
-        .filter-preset:hover { transform: translateY(-2px); border-color: #3b82f6; }
-        .filter-preset.active { border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2); }
-        .filter-preset-name { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); padding: 0.35rem 0.25rem; font-size: 0.65rem; text-align: center; font-weight: 600; }
-        .filter-scroll { display: flex; gap: 0.75rem; overflow-x: auto; padding: 0.5rem 0; scrollbar-width: thin; }
-
-        .range-slider { -webkit-appearance: none; width: 100%; height: 4px; background: #4b5563; border-radius: 2px; outline: none; }
-        .range-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: #3b82f6; cursor: pointer; transition: background .15s ease-in-out; }
-        .range-slider::-webkit-slider-thumb:hover { background: #60a5fa; }
-
-        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #3b82f6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        ::view-transition-old(modal-image), ::view-transition-new(modal-image) { animation-duration: 0.4s; }
-
-        .drop-zone { border: 2px dashed #4b5563; transition: all 0.3s; }
-        .drop-zone.drag-over { border-color: #3b82f6; background-color: rgba(59, 130, 246, 0.1); }
-
-        #histogram-canvas { width: 150px; height: 60px; background: rgba(0, 0, 0, 0.5); border-radius: 4px; }
-
-        /* Context Menu */
-        .context-menu { position: fixed; z-index: 1000; background: rgba(30, 30, 30, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 0.5rem; min-width: 200px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); }
-        .context-menu-item { padding: 0.5rem 0.75rem; cursor: pointer; border-radius: 4px; transition: background 0.2s; display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; }
-        .context-menu-item:hover { background: rgba(59, 130, 246, 0.2); }
-        .context-menu-divider { height: 1px; background: rgba(255, 255, 255, 0.1); margin: 0.25rem 0; }
-
-        .slideshow-active { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
-
-        .fade-in { animation: fadeIn 0.3s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="scripts/style.css">
 </head>
 <body class="bg-neutral-900 text-gray-100 font-sans h-screen flex flex-col overflow-hidden">
 
+    <!-- Navigation Bar -->
     <nav class="bg-neutral-800 border-b border-neutral-700 p-4 flex justify-between items-center shrink-0 z-20 shadow-lg">
         <div class="flex items-center gap-2">
             <i data-lucide="camera" class="text-blue-500 w-6 h-6"></i>
             <h1 class="text-xl font-bold tracking-tight">Lumina Pro</h1>
         </div>
-        <div class="flex gap-3 items-center">
+        <div class="flex gap-3 items-center flex-wrap">
             <div id="gallery-controls" class="hidden flex gap-2 items-center mr-4">
                 <select id="sort-select" class="bg-neutral-700 text-gray-300 text-sm px-3 py-1.5 rounded-lg border border-neutral-600 focus:border-blue-500 focus:outline-none">
                     <option value="name-asc">Name (A-Z)</option>
@@ -77,7 +35,7 @@
                     <option value="landscape">Landscape Only</option>
                 </select>
             </div>
-            <span id="image-count" class="text-sm text-gray-400 self-center hidden">0 photos</span>
+            <button id="image-count" class="hidden text-sm text-gray-400 self-center">0 photos</button>
             <label class="cursor-pointer bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-medium transition flex items-center gap-2 shadow-lg hover:shadow-blue-500/20">
                 <i data-lucide="folder-open" class="w-4 h-4"></i>
                 <span>Open Folder</span>
@@ -86,37 +44,44 @@
         </div>
     </nav>
 
+    <!-- Welcome Screen -->
     <div id="welcome-screen" class="flex-1 flex flex-col items-center justify-center p-8 text-center drop-zone">
         <div class="bg-neutral-800 p-12 rounded-2xl shadow-2xl border border-neutral-700 max-w-lg w-full">
             <div class="bg-neutral-700/50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
                 <i data-lucide="image-plus" class="w-10 h-10 text-gray-400"></i>
             </div>
-            <h2 class="text-2xl font-bold mb-3 text-white">Your Album is Empty</h2>
+            <h2 class="text-2xl font-bold mb-3 text-white">Background Gallery</h2>
             <p class="text-gray-400 mb-8 leading-relaxed">
-                Click the button or <strong class="text-blue-400">drag and drop a folder</strong> here.<br>
-                We'll automatically import photos from that folder and subfolders.
+                Click <strong>Open Folder</strong> to load your images.<br>
+                Or <strong class="text-blue-400">drag and drop a folder</strong> here.
             </p>
-            <label class="cursor-pointer inline-flex bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-xl font-bold text-lg transition shadow-xl hover:shadow-blue-500/25 items-center gap-2">
-                <i data-lucide="folder-search" class="w-5 h-5"></i>
-                <span>Select Photo Directory</span>
-                <input type="file" id="folder-input-hero" webkitdirectory directory multiple class="hidden" accept="image/*">
-            </label>
+            <div class="flex gap-4 justify-center flex-wrap">
+                <label class="cursor-pointer inline-flex bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-xl font-bold text-lg transition shadow-xl hover:shadow-blue-500/25 items-center gap-2">
+                    <i data-lucide="folder-search" class="w-5 h-5"></i>
+                    <span>Browse for Folder</span>
+                    <input type="file" id="folder-input-hero" webkitdirectory directory multiple class="hidden" accept="image/*">
+                </label>
+            </div>
         </div>
     </div>
 
+    <!-- Gallery Container -->
     <div id="gallery-container" class="hidden flex-1 overflow-y-auto p-4 md:p-6 bg-neutral-900">
         <div id="gallery-grid" class="masonry-grid"></div>
     </div>
 
+    <!-- Loading Overlay -->
     <div id="loader-overlay" class="fixed inset-0 bg-black/80 z-50 hidden flex flex-col items-center justify-center backdrop-blur-sm">
         <div class="loader mb-4"></div>
-        <p class="text-blue-400 font-medium animate-pulse">Scanning folders...</p>
+        <p class="text-blue-400 font-medium animate-pulse">Scanning for images...</p>
     </div>
 
     <!-- Context Menu -->
     <div id="context-menu" class="context-menu hidden"></div>
 
+    <!-- Image Editor Modal -->
     <div id="modal" class="fixed inset-0 bg-black/95 z-50 hidden flex flex-col opacity-0 transition-opacity duration-300">
+        <!-- Modal Header -->
         <div class="glass-effect flex justify-between items-center px-4 py-3 shrink-0">
             <button id="btn-close" class="text-gray-400 hover:text-white transition p-2 hover:bg-white/10 rounded-full">
                 <i data-lucide="x" class="w-6 h-6"></i>
@@ -126,6 +91,9 @@
                 <span class="text-gray-400 text-xs" id="file-metadata">0 MB • 0×0 • 1/1</span>
                 <span class="text-gray-500 text-xs" id="file-exif"></span>
             </div>
+            <button id="btn-copy-path" class="text-gray-400 hover:text-white transition flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-white/10 font-medium text-sm" title="Copy File Path">
+                <i data-lucide="copy" class="w-4 h-4"></i> Copy Path
+            </button>
             <div class="flex items-center gap-2">
                 <button id="btn-undo" class="text-gray-400 hover:text-white transition p-2 hover:bg-white/10 rounded-full disabled:opacity-30" disabled title="Undo (Ctrl+Z)">
                     <i data-lucide="undo" class="w-4 h-4"></i>
@@ -143,27 +111,40 @@
             </div>
         </div>
 
-        <div class="flex-1 overflow-hidden relative flex items-center justify-center p-4" id="canvas-container">
-            <button id="prev-img" class="absolute left-4 z-10 p-3 rounded-full glass-effect text-white hover:bg-black/80 hover:scale-110 transition group">
+        <!-- Canvas Container -->
+        <div class="flex-1 overflow-auto relative flex items-center justify-center p-4 bg-black/50" id="canvas-container">
+            <button id="prev-img" class="fixed left-4 z-10 p-3 rounded-full glass-effect text-white hover:bg-black/80 hover:scale-110 transition group top-1/2 -translate-y-1/2">
                 <i data-lucide="chevron-left" class="w-6 h-6 group-hover:-translate-x-0.5 transition-transform"></i>
             </button>
-            <button id="next-img" class="absolute right-4 z-10 p-3 rounded-full glass-effect text-white hover:bg-black/80 hover:scale-110 transition group">
+            <button id="next-img" class="fixed right-4 z-10 p-3 rounded-full glass-effect text-white hover:bg-black/80 hover:scale-110 transition group top-1/2 -translate-y-1/2">
                 <i data-lucide="chevron-right" class="w-6 h-6 group-hover:translate-x-0.5 transition-transform"></i>
             </button>
-            <canvas id="editor-canvas" class="max-w-full max-h-full shadow-2xl object-contain" style="view-transition-name: modal-image;"></canvas>
-            <div id="histogram-container" class="absolute bottom-4 left-4 hidden">
+            <canvas id="editor-canvas" class="shadow-2xl object-contain transition-transform duration-200 origin-center" style="view-transition-name: modal-image;"></canvas>
+            
+            <!-- Zoom Controls -->
+            <div class="absolute bottom-8 right-8 z-50 flex gap-2 glass-effect p-2 rounded-lg">
+                <button id="btn-zoom-out" class="p-2 hover:bg-white/10 rounded-md text-white tool-btn"><i data-lucide="minus" class="w-4 h-4"></i></button>
+                <span id="zoom-level" class="text-xs text-white self-center w-12 text-center font-mono">100%</span>
+                <button id="btn-zoom-in" class="p-2 hover:bg-white/10 rounded-md text-white tool-btn"><i data-lucide="plus" class="w-4 h-4"></i></button>
+            </div>
+
+            <div id="histogram-container" class="fixed bottom-4 left-4 hidden z-20">
                 <canvas id="histogram-canvas"></canvas>
             </div>
         </div>
 
-        <div class="glass-strong p-4 shrink-0 pb-6 md:pb-4">
+        <!-- Editor Controls -->
+        <div class="glass-strong p-4 shrink-0 pb-6 md:pb-4 relative z-30">
             <div class="max-w-5xl mx-auto flex flex-col gap-4">
+                <!-- Filter Presets -->
                 <div class="flex flex-col gap-2">
                     <div class="text-xs text-gray-400 uppercase tracking-wider font-bold">Quick Filters</div>
                     <div class="filter-scroll" id="filter-presets"></div>
                 </div>
 
+                <!-- Controls Row -->
                 <div class="flex flex-col md:flex-row gap-6 items-center justify-between">
+                    <!-- Sliders -->
                     <div class="flex flex-col gap-2 w-full md:w-1/3">
                         <div class="flex items-center justify-between text-xs text-gray-400 uppercase tracking-wider font-bold">
                             <span>Brightness</span><span id="val-bright">100%</span>
@@ -179,32 +160,33 @@
                         <input type="range" id="filter-saturation" min="0" max="200" value="100" class="range-slider">
                     </div>
 
+                    <!-- Tool Buttons -->
                     <div class="flex items-center gap-3 flex-wrap justify-center">
-                        <button class="tool-btn flex flex-col items-center gap-1 text-gray-400 hover:text-white group" onclick="editActions.rotate(-90)" title="[ key">
+                        <button class="tool-btn flex flex-col items-center gap-1 text-gray-400 hover:text-white group" onclick="editActions.rotate(-90)" title="Rotate Left ([ key)">
                             <div class="p-2 rounded-lg bg-neutral-700 group-hover:bg-neutral-600 transition">
                                 <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
                             </div>
                             <span class="text-[10px]">Rotate L</span>
                         </button>
-                        <button class="tool-btn flex flex-col items-center gap-1 text-gray-400 hover:text-white group" onclick="editActions.rotate(90)" title="] key">
+                        <button class="tool-btn flex flex-col items-center gap-1 text-gray-400 hover:text-white group" onclick="editActions.rotate(90)" title="Rotate Right (] key)">
                             <div class="p-2 rounded-lg bg-neutral-700 group-hover:bg-neutral-600 transition">
                                 <i data-lucide="rotate-cw" class="w-5 h-5"></i>
                             </div>
                             <span class="text-[10px]">Rotate R</span>
                         </button>
-                        <button class="tool-btn flex flex-col items-center gap-1 text-gray-400 hover:text-white group" onclick="editActions.flip('h')">
+                        <button class="tool-btn flex flex-col items-center gap-1 text-gray-400 hover:text-white group" onclick="editActions.flip('h')" title="Reverse/Mirror Image (H key)">
                             <div class="p-2 rounded-lg bg-neutral-700 group-hover:bg-neutral-600 transition">
                                 <i data-lucide="flip-horizontal" class="w-5 h-5"></i>
                             </div>
-                            <span class="text-[10px]">Flip H</span>
+                            <span class="text-[10px]">Reverse/Mirror</span>
                         </button>
-                        <button class="tool-btn flex flex-col items-center gap-1 text-gray-400 hover:text-white group" onclick="editActions.flip('v')">
+                        <button class="tool-btn flex flex-col items-center gap-1 text-gray-400 hover:text-white group" onclick="editActions.flip('v')" title="Flip Vertical (V key)">
                             <div class="p-2 rounded-lg bg-neutral-700 group-hover:bg-neutral-600 transition">
                                 <i data-lucide="flip-vertical" class="w-5 h-5"></i>
                             </div>
                             <span class="text-[10px]">Flip V</span>
                         </button>
-                        <button id="btn-histogram" class="tool-btn flex flex-col items-center gap-1 text-gray-400 hover:text-white group" onclick="editActions.toggleHistogram()" title="H key">
+                        <button id="btn-histogram" class="tool-btn flex flex-col items-center gap-1 text-gray-400 hover:text-white group" onclick="editActions.toggleHistogram()" title="Toggle Histogram (G key)">
                             <div class="p-2 rounded-lg bg-neutral-700 group-hover:bg-neutral-600 transition">
                                 <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
                             </div>
@@ -212,6 +194,7 @@
                         </button>
                     </div>
 
+                    <!-- Reset Button -->
                     <div>
                          <button class="text-red-400 text-xs hover:text-red-300 hover:underline" onclick="editActions.reset()">Reset All</button>
                     </div>
@@ -220,570 +203,7 @@
         </div>
     </div>
 
-    <script>
-        const filterPresets = [
-            { name: 'Original', brightness: 100, contrast: 100, saturation: 100, grayscale: 0, hueRotate: 0, sepia: 0 },
-            { name: 'Vintage', brightness: 110, contrast: 95, saturation: 80, grayscale: 0, hueRotate: 0, sepia: 40 },
-            { name: 'Noir', brightness: 90, contrast: 130, saturation: 0, grayscale: 100, hueRotate: 0, sepia: 0 },
-            { name: 'Vivid', brightness: 105, contrast: 115, saturation: 150, grayscale: 0, hueRotate: 0, sepia: 0 },
-            { name: 'Cool', brightness: 100, contrast: 105, saturation: 110, grayscale: 0, hueRotate: 200, sepia: 0 },
-            { name: 'Warm', brightness: 105, contrast: 105, saturation: 120, grayscale: 0, hueRotate: 20, sepia: 0 },
-            { name: 'Cyberpunk', brightness: 100, contrast: 120, saturation: 140, grayscale: 0, hueRotate: 280, sepia: 0 },
-            { name: 'Desert', brightness: 110, contrast: 110, saturation: 130, grayscale: 0, hueRotate: 30, sepia: 20 },
-        ];
-
-        const state = {
-            images: [],
-            allImages: [],
-            currentIndex: 0,
-            currentPreset: 'Original',
-            slideshowInterval: null,
-            histogramVisible: false,
-            history: [],
-            historyIndex: -1,
-            edit: {
-                rotate: 0,
-                flipH: 1,
-                flipV: 1,
-                brightness: 100,
-                contrast: 100,
-                saturation: 100,
-                grayscale: 0,
-                hueRotate: 0,
-                sepia: 0
-            }
-        };
-
-        const welcomeScreen = document.getElementById('welcome-screen');
-        const galleryContainer = document.getElementById('gallery-container');
-        const galleryGrid = document.getElementById('gallery-grid');
-        const modal = document.getElementById('modal');
-        const canvas = document.getElementById('editor-canvas');
-        const ctx = canvas.getContext('2d');
-        const inputs = [document.getElementById('folder-input'), document.getElementById('folder-input-hero')];
-        const loader = document.getElementById('loader-overlay');
-        const contextMenu = document.getElementById('context-menu');
-        const histogramCanvas = document.getElementById('histogram-canvas');
-        const histogramCtx = histogramCanvas.getContext('2d');
-
-        function initFilterPresets() {
-            const container = document.getElementById('filter-presets');
-            filterPresets.forEach(preset => {
-                const div = document.createElement('div');
-                div.className = 'filter-preset' + (preset.name === 'Original' ? ' active' : '');
-                div.dataset.preset = preset.name;
-                div.innerHTML = `
-                    <div style="width:100%;height:100%;background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);filter: brightness(${preset.brightness}%) contrast(${preset.contrast}%) saturate(${preset.saturation}%) grayscale(${preset.grayscale}%) hue-rotate(${preset.hueRotate}deg) sepia(${preset.sepia}%);"></div>
-                    <div class="filter-preset-name">${preset.name}</div>
-                `;
-                div.onclick = () => applyPreset(preset.name);
-                container.appendChild(div);
-            });
-        }
-
-        function applyPreset(presetName) {
-            const preset = filterPresets.find(p => p.name === presetName);
-            if (!preset) return;
-            
-            saveHistory();
-            state.currentPreset = presetName;
-            state.edit = { ...state.edit, ...preset };
-            
-            document.getElementById('filter-brightness').value = preset.brightness;
-            document.getElementById('val-bright').innerText = `${preset.brightness}%`;
-            document.getElementById('filter-contrast').value = preset.contrast;
-            document.getElementById('val-contrast').innerText = `${preset.contrast}%`;
-            document.getElementById('filter-saturation').value = preset.saturation;
-            document.getElementById('val-saturation').innerText = `${preset.saturation}%`;
-            
-            document.querySelectorAll('.filter-preset').forEach(el => el.classList.remove('active'));
-            const target = document.querySelector(`[data-preset="${presetName}"]`);
-            if (target) target.classList.add('active');
-            
-            drawCanvas();
-            if (state.histogramVisible) updateHistogram();
-        }
-
-        function setupDragDrop() {
-            const dropZone = welcomeScreen;
-            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(e => {
-                dropZone.addEventListener(e, evt => { evt.preventDefault(); evt.stopPropagation(); }, false);
-            });
-            ['dragenter', 'dragover'].forEach(e => dropZone.addEventListener(e, () => dropZone.classList.add('drag-over')));
-            ['dragleave', 'drop'].forEach(e => dropZone.addEventListener(e, () => dropZone.classList.remove('drag-over')));
-            dropZone.addEventListener('drop', handleDrop);
-        }
-
-        function handleDrop(e) {
-            const items = e.dataTransfer.items;
-            if (!items) return;
-            const promises = [];
-            for (let i = 0; i < items.length; i++) {
-                const item = items[i].webkitGetAsEntry();
-                if (item) promises.push(getAllFileEntries(item));
-            }
-            Promise.all(promises).then(arrays => {
-                const files = arrays.flat().filter(f => f.type.startsWith('image/'));
-                if (files.length > 0) processFiles(files);
-            });
-        }
-
-        async function getAllFileEntries(entry) {
-            const files = [];
-            if (entry.isFile) {
-                files.push(await new Promise(resolve => entry.file(resolve)));
-            } else if (entry.isDirectory) {
-                const reader = entry.createReader();
-                const entries = await new Promise(resolve => reader.readEntries(resolve));
-                for (const e of entries) files.push(...await getAllFileEntries(e));
-            }
-            return files;
-        }
-
-        function toggleSlideshow() {
-            state.slideshowInterval ? stopSlideshow() : startSlideshow();
-        }
-
-        function startSlideshow() {
-            const btn = document.getElementById('btn-slideshow');
-            const icon = document.getElementById('slideshow-icon');
-            const text = document.getElementById('slideshow-text');
-            icon.setAttribute('data-lucide', 'pause');
-            text.textContent = 'Pause';
-            btn.classList.add('slideshow-active');
-            lucide.createIcons();
-            state.slideshowInterval = setInterval(() => {
-                if (state.currentIndex < state.images.length - 1) nextImage();
-                else openModal(0);
-            }, 3000);
-        }
-
-        function stopSlideshow() {
-            const btn = document.getElementById('btn-slideshow');
-            const icon = document.getElementById('slideshow-icon');
-            const text = document.getElementById('slideshow-text');
-            if (state.slideshowInterval) {
-                clearInterval(state.slideshowInterval);
-                state.slideshowInterval = null;
-            }
-            icon.setAttribute('data-lucide', 'play');
-            text.textContent = 'Play';
-            btn.classList.remove('slideshow-active');
-            lucide.createIcons();
-        }
-
-        function updateHistogram() {
-            histogramCanvas.width = 150;
-            histogramCanvas.height = 60;
-            const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-            const r = new Array(256).fill(0), g = new Array(256).fill(0), b = new Array(256).fill(0);
-            for (let i = 0; i < data.length; i += 4) {
-                r[data[i]]++; g[data[i+1]]++; b[data[i+2]]++;
-            }
-            const max = Math.max(...r, ...g, ...b);
-            histogramCtx.clearRect(0, 0, 150, 60);
-            const draw = (ch, color) => {
-                histogramCtx.fillStyle = color;
-                const w = 150/256;
-                for (let i = 0; i < 256; i++) {
-                    const h = (ch[i]/max)*60;
-                    histogramCtx.fillRect(i*w, 60-h, w, h);
-                }
-            };
-            draw(r, 'rgba(255,0,0,0.5)');
-            draw(g, 'rgba(0,255,0,0.5)');
-            draw(b, 'rgba(0,0,255,0.5)');
-        }
-
-        function sortAndFilterImages() {
-            const sort = document.getElementById('sort-select').value;
-            const filter = document.getElementById('filter-select').value;
-            let filtered = [...state.allImages];
-            if (filter === 'portrait') filtered = filtered.filter(i => i.orientation === 'portrait');
-            else if (filter === 'landscape') filtered = filtered.filter(i => i.orientation === 'landscape');
-            if (sort === 'name-asc') filtered.sort((a,b) => a.name.localeCompare(b.name));
-            else if (sort === 'name-desc') filtered.sort((a,b) => b.name.localeCompare(a.name));
-            else if (sort === 'date-asc') filtered.sort((a,b) => a.lastModified - b.lastModified);
-            else if (sort === 'date-desc') filtered.sort((a,b) => b.lastModified - a.lastModified);
-            state.images = filtered;
-            renderGallery();
-        }
-
-        function renderGallery() {
-            galleryGrid.innerHTML = '';
-            state.images.forEach((img, i) => {
-                const div = document.createElement('div');
-                div.className = "masonry-item";
-                const card = document.createElement('div');
-                card.className = "group relative bg-neutral-800 rounded-lg overflow-hidden cursor-pointer border border-transparent hover:border-blue-500 transition shadow-lg fade-in";
-                card.onclick = () => openModal(i);
-                card.oncontextmenu = (e) => { e.preventDefault(); showContextMenu(e, i, 'gallery'); };
-                card.innerHTML = `
-                    <img src="${img.url}" class="w-full h-auto object-cover transition duration-500 group-hover:scale-105" loading="lazy">
-                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors"></div>
-                    <div class="absolute bottom-0 left-0 right-0 p-2 glass-effect opacity-0 group-hover:opacity-100 transition-opacity">
-                        <p class="text-white text-xs truncate font-mono">${img.name}</p>
-                    </div>
-                `;
-                div.appendChild(card);
-                galleryGrid.appendChild(div);
-            });
-            document.getElementById('image-count').innerText = `${state.images.length} photos`;
-        }
-
-        function showContextMenu(e, index, context) {
-            e.preventDefault();
-            const menu = contextMenu;
-            menu.innerHTML = '';
-            
-            if (context === 'gallery') {
-                menu.innerHTML = `
-                    <div class="context-menu-item" onclick="copyImagePath(${index})"><i data-lucide="clipboard" class="w-4 h-4"></i> Copy Path</div>
-                    <div class="context-menu-item" onclick="copyImage(${index})"><i data-lucide="copy" class="w-4 h-4"></i> Copy Image</div>
-                    <div class="context-menu-item" onclick="openModal(${index})"><i data-lucide="edit" class="w-4 h-4"></i> Edit</div>
-                    <div class="context-menu-divider"></div>
-                    <div class="context-menu-item" onclick="saveImageAs(${index})"><i data-lucide="download" class="w-4 h-4"></i> Save As...</div>
-                `;
-            } else if (context === 'editor') {
-                menu.innerHTML = `
-                    <div class="context-menu-item" onclick="saveImage()"><i data-lucide="save" class="w-4 h-4"></i> Save Edited Image</div>
-                    <div class="context-menu-item" onclick="copyCanvasImage()"><i data-lucide="clipboard" class="w-4 h-4"></i> Copy to Clipboard</div>
-                    <div class="context-menu-divider"></div>
-                    <div class="context-menu-item ${state.historyIndex <= 0 ? 'opacity-50 pointer-events-none' : ''}" onclick="undo()"><i data-lucide="undo" class="w-4 h-4"></i> Undo</div>
-                    <div class="context-menu-item ${state.historyIndex >= state.history.length - 1 ? 'opacity-50 pointer-events-none' : ''}" onclick="redo()"><i data-lucide="redo" class="w-4 h-4"></i> Redo</div>
-                    <div class="context-menu-item" onclick="editActions.reset()"><i data-lucide="rotate-ccw" class="w-4 h-4"></i> Reset to Original</div>
-                `;
-            }
-            
-            menu.style.left = e.pageX + 'px';
-            menu.style.top = e.pageY + 'px';
-            menu.classList.remove('hidden');
-            lucide.createIcons();
-            
-            const closeMenu = () => { menu.classList.add('hidden'); document.removeEventListener('click', closeMenu); };
-            setTimeout(() => document.addEventListener('click', closeMenu), 100);
-        }
-
-        function copyImagePath(i) {
-            const path = state.images[i].name;
-            navigator.clipboard.writeText(path).then(() => console.log('Path copied'));
-        }
-
-        async function copyImage(i) {
-            const response = await fetch(state.images[i].url);
-            const blob = await response.blob();
-            navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
-        }
-
-        async function copyCanvasImage() {
-            canvas.toBlob(blob => {
-                navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
-            });
-        }
-
-        function saveImageAs(i) {
-            const link = document.createElement('a');
-            link.download = state.images[i].name;
-            link.href = state.images[i].url;
-            link.click();
-        }
-
-        lucide.createIcons();
-        initFilterPresets();
-        setupDragDrop();
-
-        inputs.forEach(input => input.addEventListener('change', e => processFiles(Array.from(e.target.files))));
-        document.getElementById('sort-select').addEventListener('change', sortAndFilterImages);
-        document.getElementById('filter-select').addEventListener('change', sortAndFilterImages);
-        document.getElementById('btn-close').addEventListener('click', closeModal);
-        document.getElementById('prev-img').addEventListener('click', prevImage);
-        document.getElementById('next-img').addEventListener('click', nextImage);
-        document.getElementById('btn-save').addEventListener('click', saveImage);
-        document.getElementById('btn-slideshow').addEventListener('click', toggleSlideshow);
-        document.getElementById('btn-undo').addEventListener('click', undo);
-        document.getElementById('btn-redo').addEventListener('click', redo);
-
-        canvas.addEventListener('contextmenu', e => showContextMenu(e, state.currentIndex, 'editor'));
-
-        ['filter-brightness', 'filter-contrast', 'filter-saturation'].forEach(id => {
-            document.getElementById(id).addEventListener('input', e => {
-                const prop = id.split('-')[1];
-                state.edit[prop] = e.target.value;
-                document.getElementById('val-' + prop.slice(0, prop === 'brightness' ? 6 : prop === 'contrast' ? 8 : 10)).innerText = `${e.target.value}%`;
-                state.currentPreset = 'Custom';
-                document.querySelectorAll('.filter-preset').forEach(el => el.classList.remove('active'));
-                drawCanvas();
-                if (state.histogramVisible) updateHistogram();
-            });
-        });
-
-        document.addEventListener('keydown', e => {
-            if (modal.classList.contains('hidden')) return;
-            if (e.key === 'Escape') closeModal();
-            if (e.key === 'ArrowLeft') prevImage();
-            if (e.key === 'ArrowRight') nextImage();
-            if (e.key === ' ') { e.preventDefault(); toggleSlideshow(); }
-            if (e.key === '[') editActions.rotate(-90);
-            if (e.key === ']') editActions.rotate(90);
-            if (e.key.toLowerCase() === 'h') editActions.toggleHistogram();
-            if (e.key === 'Home') openModal(0);
-            if (e.key === 'End') openModal(state.images.length - 1);
-            if (e.ctrlKey && e.key === 'z') { e.preventDefault(); undo(); }
-            if (e.ctrlKey && (e.key === 'y' || (e.shiftKey && e.key === 'Z'))) { e.preventDefault(); redo(); }
-        });
-
-        function processFiles(files) {
-            loader.classList.remove('hidden');
-            setTimeout(() => {
-                const imgs = files.filter(f => f.type.startsWith('image/'));
-                if (imgs.length === 0) { alert("No images found"); loader.classList.add('hidden'); return; }
-                
-                state.images = [];
-                state.allImages = [];
-                galleryGrid.innerHTML = '';
-                let loaded = 0;
-                
-                imgs.forEach(file => {
-                    const url = URL.createObjectURL(file);
-                    const img = new Image();
-                    img.onload = function() {
-                        const imgData = {
-                            name: file.name,
-                            url: url,
-                            type: file.type,
-                            size: file.size,
-                            lastModified: file.lastModified,
-                            width: this.naturalWidth,
-                            height: this.naturalHeight,
-                            orientation: this.naturalWidth > this.naturalHeight ? 'landscape' : 'portrait',
-                            file: file
-                        };
-                        
-                        // Extract EXIF if available
-                        if (window.EXIF) {
-                            EXIF.getData(file, function() {
-                                imgData.exif = {
-                                    make: EXIF.getTag(this, 'Make'),
-                                    model: EXIF.getTag(this, 'Model'),
-                                    iso: EXIF.getTag(this, 'ISOSpeedRatings'),
-                                    aperture: EXIF.getTag(this, 'FNumber'),
-                                    shutter: EXIF.getTag(this, 'ExposureTime'),
-                                    focal: EXIF.getTag(this, 'FocalLength'),
-                                    date: EXIF.getTag(this, 'DateTime')
-                                };
-                            });
-                        }
-                        
-                        state.allImages.push(imgData);
-                        loaded++;
-                        if (loaded === imgs.length) {
-                            state.images = [...state.allImages];
-                            sortAndFilterImages();
-                            welcomeScreen.classList.add('hidden');
-                            galleryContainer.classList.remove('hidden');
-                            document.getElementById('gallery-controls').classList.remove('hidden');
-                            document.getElementById('image-count').classList.remove('hidden');
-                            loader.classList.add('hidden');
-                        }
-                    };
-                    img.src = url;
-                });
-            }, 100);
-        }
-
-        function formatFileSize(bytes) {
-            if (!bytes) return '0 B';
-            const k = 1024, sizes = ['B', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
-        }
-
-        function openModal(i) {
-            state.currentIndex = i;
-            if (document.startViewTransition) {
-                document.startViewTransition(() => {
-                    modal.classList.remove('hidden');
-                    void modal.offsetWidth;
-                    modal.classList.remove('opacity-0');
-                });
-            } else {
-                modal.classList.remove('hidden');
-                void modal.offsetWidth;
-                modal.classList.remove('opacity-0');
-            }
-            stopSlideshow();
-            resetEdits();
-            loadImageToCanvas();
-            updateModalUI();
-        }
-
-        function closeModal() {
-            stopSlideshow();
-            modal.classList.add('opacity-0');
-            setTimeout(() => modal.classList.add('hidden'), 300);
-        }
-
-        function updateModalUI() {
-            const img = state.images[state.currentIndex];
-            document.getElementById('file-name').innerText = img.name;
-            const dims = `${img.width}×${img.height}`;
-            const size = formatFileSize(img.size);
-            const pos = `${state.currentIndex + 1}/${state.images.length}`;
-            document.getElementById('file-metadata').innerText = `${size} • ${dims} • ${pos}`;
-            
-            if (img.exif && (img.exif.make || img.exif.model || img.exif.iso)) {
-                const parts = [];
-                if (img.exif.make && img.exif.model) parts.push(`${img.exif.make} ${img.exif.model}`);
-                if (img.exif.focal) parts.push(`${img.exif.focal}mm`);
-                if (img.exif.aperture) parts.push(`f/${img.exif.aperture}`);
-                if (img.exif.shutter) parts.push(`${img.exif.shutter}s`);
-                if (img.exif.iso) parts.push(`ISO ${img.exif.iso}`);
-                document.getElementById('file-exif').innerText = parts.join(' • ');
-            } else {
-                document.getElementById('file-exif').innerText = '';
-            }
-            
-            document.getElementById('prev-img').style.opacity = state.currentIndex === 0 ? '0.3' : '1';
-            document.getElementById('next-img').style.opacity = state.currentIndex === state.images.length - 1 ? '0.3' : '1';
-        }
-
-        function prevImage() {
-            if (state.currentIndex > 0) openModal(state.currentIndex - 1);
-        }
-
-        function nextImage() {
-            if (state.currentIndex < state.images.length - 1) openModal(state.currentIndex + 1);
-        }
-
-        let currentImageObj = new Image();
-
-        function loadImageToCanvas() {
-            const img = state.images[state.currentIndex];
-            currentImageObj.src = img.url;
-            currentImageObj.onload = () => {
-                drawCanvas();
-                if (state.histogramVisible) updateHistogram();
-            };
-        }
-
-        function saveHistory() {
-            if (state.historyIndex < state.history.length - 1) {
-                state.history = state.history.slice(0, state.historyIndex + 1);
-            }
-            state.history.push(JSON.parse(JSON.stringify(state.edit)));
-            state.historyIndex = state.history.length - 1;
-            if (state.history.length > 20) {
-                state.history.shift();
-                state.historyIndex--;
-            }
-            updateUndoRedoButtons();
-        }
-
-        function undo() {
-            if (state.historyIndex > 0) {
-                state.historyIndex--;
-                state.edit = JSON.parse(JSON.stringify(state.history[state.historyIndex]));
-                updateSlidersFromState();
-                drawCanvas();
-                if (state.histogramVisible) updateHistogram();
-                updateUndoRedoButtons();
-            }
-        }
-
-        function redo() {
-            if (state.historyIndex < state.history.length - 1) {
-                state.historyIndex++;
-                state.edit = JSON.parse(JSON.stringify(state.history[state.historyIndex]));
-                updateSlidersFromState();
-                drawCanvas();
-                if (state.histogramVisible) updateHistogram();
-                updateUndoRedoButtons();
-            }
-        }
-
-        function updateUndoRedoButtons() {
-            document.getElementById('btn-undo').disabled = state.historyIndex <= 0;
-            document.getElementById('btn-redo').disabled = state.historyIndex >= state.history.length - 1;
-        }
-
-        function updateSlidersFromState() {
-            document.getElementById('filter-brightness').value = state.edit.brightness;
-            document.getElementById('val-bright').innerText = `${state.edit.brightness}%`;
-            document.getElementById('filter-contrast').value = state.edit.contrast;
-            document.getElementById('val-contrast').innerText = `${state.edit.contrast}%`;
-            document.getElementById('filter-saturation').value = state.edit.saturation;
-            document.getElementById('val-saturation').innerText = `${state.edit.saturation}%`;
-        }
-
-        const editActions = {
-            rotate: deg => {
-                saveHistory();
-                state.edit.rotate = (state.edit.rotate + deg) % 360;
-                drawCanvas();
-                if (state.histogramVisible) updateHistogram();
-            },
-            flip: dir => {
-                saveHistory();
-                if (dir === 'h') state.edit.flipH *= -1;
-                if (dir === 'v') state.edit.flipV *= -1;
-                drawCanvas();
-                if (state.histogramVisible) updateHistogram();
-            },
-            toggleHistogram: () => {
-                state.histogramVisible = !state.histogramVisible;
-                const container = document.getElementById('histogram-container');
-                const btn = document.getElementById('btn-histogram');
-                if (state.histogramVisible) {
-                    container.classList.remove('hidden');
-                    btn.classList.add('text-blue-400');
-                    updateHistogram();
-                } else {
-                    container.classList.add('hidden');
-                    btn.classList.remove('text-blue-400');
-                }
-            },
-            reset: () => {
-                saveHistory();
-                resetEdits();
-                drawCanvas();
-                if (state.histogramVisible) updateHistogram();
-            }
-        };
-
-        function resetEdits() {
-            state.edit = { rotate: 0, flipH: 1, flipV: 1, brightness: 100, contrast: 100, saturation: 100, grayscale: 0, hueRotate: 0, sepia: 0 };
-            state.currentPreset = 'Original';
-            state.history = [JSON.parse(JSON.stringify(state.edit))];
-            state.historyIndex = 0;
-            updateSlidersFromState();
-            document.querySelectorAll('.filter-preset').forEach(el => el.classList.remove('active'));
-            const orig = document.querySelector('[data-preset="Original"]');
-            if (orig) orig.classList.add('active');
-            updateUndoRedoButtons();
-        }
-
-        function drawCanvas() {
-            const isVert = Math.abs(state.edit.rotate) % 180 !== 0;
-            const w = currentImageObj.naturalWidth;
-            const h = currentImageObj.naturalHeight;
-            canvas.width = isVert ? h : w;
-            canvas.height = isVert ? w : h;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.save();
-            ctx.translate(canvas.width / 2, canvas.height / 2);
-            ctx.rotate(state.edit.rotate * Math.PI / 180);
-            ctx.scale(state.edit.flipH, state.edit.flipV);
-            ctx.filter = `brightness(${state.edit.brightness}%) contrast(${state.edit.contrast}%) saturate(${state.edit.saturation}%) grayscale(${state.edit.grayscale}%) hue-rotate(${state.edit.hueRotate}deg) sepia(${state.edit.sepia}%)`;
-            ctx.drawImage(currentImageObj, -w / 2, -h / 2);
-            ctx.restore();
-        }
-
-        function saveImage() {
-            const link = document.createElement('a');
-            link.download = `edited_${state.images[state.currentIndex].name}`;
-            link.href = canvas.toDataURL(state.images[state.currentIndex].type, 0.9);
-            link.click();
-        }
-    </script>
+    <!-- Load JavaScript - Note: We need to load both parts of the script -->
+    <script src="scripts/scripts.js"></script>
 </body>
 </html>
